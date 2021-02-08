@@ -31,7 +31,6 @@ public class EmployeeImplService implements EmployeeService {
 			}
 		}
 		return listEmployeesDTO;
-
 	}
 
 	@Override
