@@ -21,8 +21,7 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public List<EmployeeDTO> getAllEmployees() {
-	    List<EmployeeDTO> listEmployeesDTO = null;
-
+		List<EmployeeDTO> listEmployeesDTO = null;
 		List<Employee> listEmployees = employeeRepository.findAll();
 		if (listEmployees != null && listEmployees.size() > 0) {
 			listEmployeesDTO = new ArrayList<EmployeeDTO>();
@@ -55,13 +54,13 @@ public class EmployeeImplService implements EmployeeService {
 					employee.setName(employeeDTO.getName());
 					employee.setPosition(employeeDTO.getPosition());
 					return employeeRepository.save(employee);
-					})
+				})
 				.orElseGet(() -> {
 					employeeDTO.setId(id);
 					Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 					return employeeRepository.save(newEmployee);
-					});
-			
+				});
+
 	}
 
 	@Override
@@ -74,8 +73,8 @@ public class EmployeeImplService implements EmployeeService {
 
 		return Optional.ofNullable(employeeRepository.findByPosition(position).stream()
 				.map(employee -> this.mapEntitytoDTO(employee))
-					.filter(Objects::nonNull)
-					.collect(Collectors.toList()))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList()))
 				.filter(list -> !list.isEmpty())
 				.orElseThrow(() -> new ParamNotFoundException(position));
 	}
