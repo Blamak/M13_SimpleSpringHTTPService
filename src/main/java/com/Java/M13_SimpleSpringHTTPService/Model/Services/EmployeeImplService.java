@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.Java.M13_SimpleSpringHTTPService.Exceptions.ParamNotFoundException;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
@@ -33,10 +35,10 @@ public class EmployeeImplService implements EmployeeService {
 	}
 
 	@Override
-	public Employee saveEmployee(EmployeeDTO employeeDTO) {
+	public String saveEmployee(EmployeeDTO employeeDTO) {
 		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 		newEmployee = employeeRepository.save(newEmployee);
-		return newEmployee;
+		return "yeye";
 	}
 
 	public EmployeeDTO getEmployeeById(Integer id) {

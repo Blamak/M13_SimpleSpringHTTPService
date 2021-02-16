@@ -10,7 +10,7 @@ public interface EmployeeService {
 	
 	EmployeeDTO getEmployeeById(Integer id);
 	
-	Employee saveEmployee(EmployeeDTO employeeDTO);
+	String saveEmployee(EmployeeDTO employeeDTO);
 	
 	Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id);
 	

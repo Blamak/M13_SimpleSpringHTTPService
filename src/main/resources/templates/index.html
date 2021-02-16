@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<!-- <html xmlns:th="http://thymeleaf.org"> -->
+<head>
+<title>Spring Boot - AJAX POST GET Example</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/styles.css" />
+
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/> -->
+<!--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+<script src="/js/postrequest.js"></script>
+<script src="/js/getrequest.js"></script>
+<script src="/js/deleteRequest.js"></script>
+<script src="/js/putRequest.js"></script>
+
+</head>
+<body>
+
+	<div class="container">
+
+		<h1 style="text-align:center">M13 Simple Spring HTTP Service</h1>
+		<div>
+			<h3 style="margin: 0px 10px 20px 50px">Create new employee:</h3>
+			<form style="margin: 20px 40px 0px 50px" action="/save"
+				id="employeeForm">
+				<div class="form-group">
+					<label for="name" style="margin-left: 20px">Name:</label> <input
+						style="margin-left: 20px" type="text" class="form-control"
+						id="name" placeholder="Enter Name" />
+				</div>
+				<br>
+				<div class="form-group">
+					<label for="position" style="margin-left: 20px; margin-right: 5px">Position:</label>
+					<input type="text" id="position" placeholder="Enter Position" />
+				</div>
+				<br>
+				<button id="submitButton" type="submit" value="Submit"
+					style="margin-left: 100px; margin-right: 5px">Submit</button>
+			</form>
+		</div>
+
+		<div class="col-sm-7" id="postResultDiv"></div>
+
+		<div>
+			<div id="getResultDiv" style="padding: 20px 10px 20px 50px">
+				<h3>Employees List:</h3>
+				<p>(Click on field to edit)</p>
+				<table id='list'></table>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

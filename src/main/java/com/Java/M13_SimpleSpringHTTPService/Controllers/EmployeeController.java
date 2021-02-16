@@ -25,11 +25,16 @@ public class EmployeeController {
 		return employeeService.getAllEmployees();
 	}
 	
-
-	@PostMapping("/employees")
-	public Employee newEmployee(@RequestBody EmployeeDTO employeeDTO) {
+	@PostMapping("/save")
+	public String newEmployee(@RequestBody EmployeeDTO employeeDTO) {
 		return employeeService.saveEmployee(employeeDTO);
 	}
+	
+//	@PutMapping("/employees/{id}")
+//	public Employee updateEmployee(@PathVariable Integer id) {
+//		return employeeService.replaceEmployee(id);
+//	}
+//	
 	@PutMapping("/employees/{id}")
 	public Employee updateEmployee(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
 		return employeeService.replaceEmployee(employeeDTO, id);
