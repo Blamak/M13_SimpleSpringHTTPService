@@ -1,4 +1,4 @@
-package com.Java.M13_SimpleSpringHTTPService.Model.Services;
+package com.Java.M13_SimpleSpringHTTPService.message;
 
 public class Response {
 	private String status;
