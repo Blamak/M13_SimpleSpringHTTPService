@@ -12,6 +12,7 @@ import com.Java.M13_SimpleSpringHTTPService.Exceptions.ParamNotFoundException;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
 import com.Java.M13_SimpleSpringHTTPService.Model.Repositories.EmployeeRepository;
+import com.Java.M13_SimpleSpringHTTPService.message.Response;
 
 @Service
 public class EmployeeImplService implements EmployeeService {
@@ -20,7 +21,7 @@ public class EmployeeImplService implements EmployeeService {
 	EmployeeRepository employeeRepository;
 
 	@Override
-	public List<EmployeeDTO> getAllEmployees() {
+	public Response getAllEmployees() {
 		List<EmployeeDTO> listEmployeesDTO = null;
 		List<Employee> listEmployees = employeeRepository.findAll();
 		if (listEmployees != null && listEmployees.size() > 0) {
@@ -29,41 +30,48 @@ public class EmployeeImplService implements EmployeeService {
 				listEmployeesDTO.add(this.mapEntitytoDTO(employee));
 			}
 		}
-		return listEmployeesDTO;
+		
+		Response response = new Response("OK", listEmployeesDTO);
+		return response;
 	}
 
 	@Override
-	public Employee saveEmployee(EmployeeDTO employeeDTO) {
+	public Response saveEmployee(EmployeeDTO employeeDTO) {
 		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 		newEmployee = employeeRepository.save(newEmployee);
-		return newEmployee;
+		Response response = new Response("OK", newEmployee);
+		return response;
 	}
 
 	public EmployeeDTO getEmployeeById(Integer id) {
-
 		return employeeRepository.findById(id)
 				.map(employee -> this.mapEntitytoDTO(employee))
 				.orElseThrow(() -> new ParamNotFoundException(id));
 	}
 
 	@Override
-	public Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
-
+	public Response replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
 		return employeeRepository.findById(id).map(employee -> {
 			employee.setName(employeeDTO.getName());
 			employee.setPosition(employeeDTO.getPosition());
-			return employeeRepository.save(employee);
-		}).orElseGet(() -> {
-			employeeDTO.setId(id);
+			employeeRepository.save(employee);
+			Response response = new Response("OK", employee);
+			return response;
+		}).orElseGet(() -> { // create new employee if he/she doesn't exist yet
 			Employee newEmployee = this.mapDtotoEntity(employeeDTO);
-			return employeeRepository.save(newEmployee);
+			employeeRepository.save(newEmployee);
+			Response response = new Response("OK", newEmployee);
+			return response;
 		});
 
 	}
 
 	@Override
-	public void deleteById(Integer id) {
+	public Response deleteById(Integer id) {
+		Optional<Employee> removedEmployee = employeeRepository.findById(id);
 		employeeRepository.deleteById(id);
+		Response response = new Response("OK", removedEmployee);
+		return response;
 	}
 
 	@Override
