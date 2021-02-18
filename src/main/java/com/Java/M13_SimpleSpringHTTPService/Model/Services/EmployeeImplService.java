@@ -39,12 +39,6 @@ public class EmployeeImplService implements EmployeeService {
 		return newEmployee;
 	}
 
-	public EmployeeDTO getEmployeeById(Integer id) {
-
-		return employeeRepository.findById(id)
-				.map(employee -> this.mapEntitytoDTO(employee))
-				.orElseThrow(() -> new ParamNotFoundException(id));
-	}
 
 	@Override
 	public Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
@@ -76,6 +70,15 @@ public class EmployeeImplService implements EmployeeService {
 				.orElseThrow(() -> new ParamNotFoundException(position));
 	}
 
+	@Override
+	public EmployeeDTO getEmployeeById(Integer id) {
+		
+		return employeeRepository.findById(id)
+				.map(employee -> this.mapEntitytoDTO(employee))
+				.orElseThrow(() -> new ParamNotFoundException(id));
+	}
+	
+	
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
 		Employee emp = new Employee();
 		if (dto.getId() != null) {
