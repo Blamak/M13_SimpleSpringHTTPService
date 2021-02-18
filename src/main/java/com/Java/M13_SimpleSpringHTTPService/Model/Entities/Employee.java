@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+
 import javax.persistence.Id;
 
 @Entity
@@ -15,9 +16,11 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	@Column(name = "Name", length = 100, unique = true, nullable = false)
+	
+	@Column(name = "Name", length = 100, nullable = false)
 	private String name;
-	@Column(name = "Position")
+	
+	@Column(name = "Position", length = 100, nullable = false)
 	private String position;
 
 	public Integer getId() {

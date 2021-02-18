@@ -1,6 +1,7 @@
 package com.Java.M13_SimpleSpringHTTPService.Controllers;
 
 import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +24,7 @@ public class EmployeeController {
 	// ----------- Requests through Ajax: --------- //
 	
 	@PostMapping("/save") // CREATE
-	public Response newEmployee(@RequestBody EmployeeDTO employeeDTO) {
+	public Response newEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
 		return employeeService.saveEmployee(employeeDTO);
 	}
 	
@@ -56,4 +57,5 @@ public class EmployeeController {
 	public EmployeeDTO listById(@PathVariable Integer id) {
 		return employeeService.getEmployeeById(id);
 	}
+	
 }

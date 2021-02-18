@@ -12,14 +12,14 @@ $(document).ready(function() {
 			url: "/employees",
 			success: function(result) {
 				if (result.status == "OK") {
-					$('#getResultDiv ul').empty();
-					$('#list').append('<thead>' + '<tr> <th>Id</th> <th>Name</th> <th>Position</th>' + '<th> </th>' + '</thead>')
+					$('#list').append('<tbody>');
 					$.each(result.data, function(index, employee) {
-						let row = $('<tr>').addClass("row");
-						row.append($('<td>').append(employee.id))
-						row.append($('<td>').append(`<input value=${employee.name}></input>`));
-						row.append($('<td>').append(`<input value=${employee.position}></input>`));
-						row.append($('<td>').append(`<button class="delete">Delete</button`).append(`<button class="update">Update</button`));
+						let row = $('<tr>');
+						row.append($(`<th scope="row">`).append(employee.id))
+						row.append($('<td>').append(`<input type="text" value=${employee.name}>`));
+						row.append($('<td>').append(`<input type="text" value=${employee.position}>`));
+						row.append($('<td>').append(`<button class="delete btn btn-outline-danger">Delete</button`));
+						row.append($('<td>').append(`<button class="update btn btn-outline-primary">Update</button`));
 
 						$('#list').append(row);
 					});
@@ -29,7 +29,6 @@ $(document).ready(function() {
 				}
 			},
 			error: function(e) {
-				$("#getResultDiv").html("<strong>Error</strong>");
 				console.log("ERROR: ", e);
 			}
 		});

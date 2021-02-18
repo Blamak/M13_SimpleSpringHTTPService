@@ -10,33 +10,41 @@ $(function() {
 
 	function ajaxPost() {
 
-		// PREPARE FORM DATA
-		var formData = {
-			name: $("#name").val(),
-			position: $("#position").val()
+		try {
+			const name = $("#name").val();
+			const position = $("#position").val();
+
+			if (name.trim() == '' || position.trim() == '') {
+				throw " Name and Position are mandatory.";
+			}
+			
+			const formData = {
+				name: name,
+				position: position
+			}
+			
+			$.ajax({
+				type: "POST",
+				url: '/save',
+				data: JSON.stringify(formData),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function(result) {
+					if (result.status == "OK") {
+						alert("Post Successfully!" + "  ---> New Employee's Info:"
+							+ "\nName = " + result.data.name
+							+ " , Position = " + result.data.position)
+						location.reload();
+					}
+				},
+				error: function(e) {
+					console.log("ERROR: ", e);
+				}
+			});
+			
+		} catch (e) {
+			alert(e)
 		}
 
-		// DO POST
-		$.ajax({
-			type: "POST",
-			url: '/save',
-			data: JSON.stringify(formData),
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: function(result) {
-				if (result.status == "OK") {
-					alert("Post Successfully!" + "  ---> New Employee's Info:"
-					                           + "\nName = " +result.data.name
-                                               + " , Position = " + result.data.position)
-					location.reload();
-				} else {
-					console.log("Fail: " +result)
-				}
-			},
-			error: function(e) {
-				alert("Error!")
-				console.log("ERROR: ", e);
-			}
-		});
 	}
 })
