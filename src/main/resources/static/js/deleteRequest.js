@@ -4,15 +4,14 @@ $(document).on("click", ".delete", function() {
 	ajaxDelete(id);
 });
 
-
 function ajaxDelete(id) {
-
 	$.ajax({
 		type: "DELETE",
 		url: "/employees/" + id,
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
 		success: function(result) {
+			
 			if (result.status == "OK") {
 				alert("Deleted Successfully!" + "  ---> Erased Employee's Info:"
 					+ "\nName = " + result.data.name
@@ -21,12 +20,12 @@ function ajaxDelete(id) {
 			} else {
 				console.log("Fail: " + result)
 			}
+			
 		},
 		error: function(e) {
 			alert("Error!")
 			console.log("ERROR: ", e);
 		}
-	
     })
 }
 

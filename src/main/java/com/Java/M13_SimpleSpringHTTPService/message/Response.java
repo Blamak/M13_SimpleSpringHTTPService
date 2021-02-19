@@ -12,6 +12,7 @@ public class Response {
 		this.status = status;
 		this.data = data;
 	}
+	
 
 	public String getStatus() {
 		return status;

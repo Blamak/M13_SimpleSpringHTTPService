@@ -24,13 +24,14 @@ public class EmployeeImplService implements EmployeeService {
 	public Response getAllEmployees() {
 		List<EmployeeDTO> listEmployeesDTO = null;
 		List<Employee> listEmployees = employeeRepository.findAll();
+		
 		if (listEmployees != null && listEmployees.size() > 0) {
 			listEmployeesDTO = new ArrayList<EmployeeDTO>();
 			for (Employee employee : listEmployees) {
 				listEmployeesDTO.add(this.mapEntitytoDTO(employee));
 			}
 		}
-		
+
 		Response response = new Response("OK", listEmployeesDTO);
 		return response;
 	}
@@ -39,27 +40,31 @@ public class EmployeeImplService implements EmployeeService {
 	public Response saveEmployee(EmployeeDTO employeeDTO) {
 		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 		newEmployee = employeeRepository.save(newEmployee);
+		
 		Response response = new Response("OK", newEmployee);
 		return response;
 	}
 
-	public EmployeeDTO getEmployeeById(Integer id) {
-		return employeeRepository.findById(id)
-				.map(employee -> this.mapEntitytoDTO(employee))
-				.orElseThrow(() -> new ParamNotFoundException(id));
-	}
 
+	/**
+	 * Method for updating PUT request
+	 * Creates a new employee if new info is sent
+	 */
 	@Override
 	public Response replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
+		
 		return employeeRepository.findById(id).map(employee -> {
 			employee.setName(employeeDTO.getName());
 			employee.setPosition(employeeDTO.getPosition());
 			employeeRepository.save(employee);
+			
 			Response response = new Response("OK", employee);
 			return response;
+			
 		}).orElseGet(() -> { // create new employee if he/she doesn't exist yet
 			Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 			employeeRepository.save(newEmployee);
+			
 			Response response = new Response("OK", newEmployee);
 			return response;
 		});
@@ -78,10 +83,15 @@ public class EmployeeImplService implements EmployeeService {
 	public List<EmployeeDTO> getByPosition(String position) {
 
 		return Optional.ofNullable(employeeRepository.findByPosition(position).stream()
+				.map(employee -> this.mapEntitytoDTO(employee)).filter(Objects::nonNull).collect(Collectors.toList()))
+				.filter(list -> !list.isEmpty()).orElseThrow(() -> new ParamNotFoundException(position));
+	}
+
+	@Override
+	public EmployeeDTO getById(Integer id) {
+		return employeeRepository.findById(id)
 				.map(employee -> this.mapEntitytoDTO(employee))
-					.filter(Objects::nonNull).collect(Collectors.toList()))
-				.filter(list -> !list.isEmpty())
-				.orElseThrow(() -> new ParamNotFoundException(position));
+				.orElseThrow(() -> new ParamNotFoundException(id));
 	}
 
 	private Employee mapDtotoEntity(EmployeeDTO dto) {

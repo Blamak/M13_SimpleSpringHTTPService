@@ -7,7 +7,6 @@ public class ParamNotFoundException extends RuntimeException {
 	public ParamNotFoundException(Integer id) {
 		super("Could not find employee " + id);
 	}
-
 	
 	public ParamNotFoundException(String position) {
 		super("Could not find position " + position);

@@ -32,7 +32,6 @@ public class EmployeeController {
 		return employeeService.getAllEmployees();
 	}
 	
-	
 	@PutMapping("/employees/{id}") // UPDATE
 	public Response updateEmployee(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
 		return employeeService.replaceEmployee(employeeDTO, id);
@@ -44,7 +43,7 @@ public class EmployeeController {
 		return employeeService.deleteById(id);
 	}
 	
-
+	
 	// ------------ Requests only from url: ---------- //
 	
 	@GetMapping("/position/{position}")
@@ -54,6 +53,6 @@ public class EmployeeController {
 	
 	@GetMapping("/id/{id}")
 	public EmployeeDTO listById(@PathVariable Integer id) {
-		return employeeService.getEmployeeById(id);
+		return employeeService.getById(id);
 	}
 }
