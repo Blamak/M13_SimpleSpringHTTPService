@@ -24,6 +24,7 @@ public class EmployeeImplService implements EmployeeService {
 	public Response getAllEmployees() {
 		List<EmployeeDTO> listEmployeesDTO = null;
 		List<Employee> listEmployees = employeeRepository.findAll();
+		
 		if (listEmployees != null && listEmployees.size() > 0) {
 			listEmployeesDTO = new ArrayList<EmployeeDTO>();
 			for (Employee employee : listEmployees) {
@@ -39,6 +40,7 @@ public class EmployeeImplService implements EmployeeService {
 	public Response saveEmployee(EmployeeDTO employeeDTO) {
 		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 		newEmployee = employeeRepository.save(newEmployee);
+		
 		Response response = new Response("OK", newEmployee);
 		return response;
 	}
@@ -51,25 +53,29 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public Response replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
+		
 		return employeeRepository.findById(id).map(employee -> {
 			employee.setName(employeeDTO.getName());
 			employee.setPosition(employeeDTO.getPosition());
 			employeeRepository.save(employee);
+			
 			Response response = new Response("OK", employee);
 			return response;
+			
 		}).orElseGet(() -> { // create new employee if he/she doesn't exist yet
 			Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 			employeeRepository.save(newEmployee);
+			
 			Response response = new Response("OK", newEmployee);
 			return response;
 		});
-
 	}
 
 	@Override
 	public Response deleteById(Integer id) {
 		Optional<Employee> removedEmployee = employeeRepository.findById(id);
 		employeeRepository.deleteById(id);
+		
 		Response response = new Response("OK", removedEmployee);
 		return response;
 	}
@@ -86,9 +92,11 @@ public class EmployeeImplService implements EmployeeService {
 
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
 		Employee emp = new Employee();
+		
 		if (dto.getId() != null) {
 			emp.setId(dto.getId());
 		}
+		
 		emp.setName(dto.getName());
 		emp.setPosition(dto.getPosition());
 
@@ -97,9 +105,11 @@ public class EmployeeImplService implements EmployeeService {
 
 	private EmployeeDTO mapEntitytoDTO(Employee entity) {
 		EmployeeDTO dto = new EmployeeDTO();
+		
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setPosition(entity.getPosition());
+		
 		return dto;
 	}
 

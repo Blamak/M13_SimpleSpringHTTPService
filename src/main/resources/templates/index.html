@@ -2,52 +2,46 @@
 <html>
 <head>
 
-<title>Spring Boot - AJAX POST GET Example</title>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Spring Boot - AJAX POST GET Example</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<link rel="stylesheet" type="text/css" href="styles/styles.css">
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-	crossorigin="anonymous">
-	
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
-<script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-	crossorigin="anonymous"></script>
-	
-<script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
-	integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
-	crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-<script src="/js/postrequest.js"></script>
-<script src="/js/getrequest.js"></script>
-<script src="/js/deleteRequest.js"></script>
-<script src="/js/putRequest.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+		crossorigin="anonymous"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+		integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
+		crossorigin="anonymous"></script>
+
+	<script src="/js/postrequest.js"></script>
+	<script src="/js/getrequest.js"></script>
+	<script src="/js/deleteRequest.js"></script>
+	<script src="/js/putRequest.js"></script>
 
 </head>
 
 <body>
-	<div
-		style="width: 100%; margin: auto; margin-bottom: 30px; text-align: center; padding: 30px; background-color: LightGray">
+
+	<div id="headerTitle">
 		<h3>M13 Simple Spring HTTP Service</h3>
 	</div>
+
+	<!-- New employee form -->
 	<div style="width: 50%; margin: auto" class="card text-center">
 		<div class="card-body">
 			<h5 class="card-title">Create new employee:</h5>
-			<form class="form-inline justify-content-center" action="/save"
-				id="employeeForm">
+			<form class="form-inline justify-content-center" action="/save" id="employeeForm">
 				<div class=" position-relative">
-					<label class="sr-only form-label" for="name">Name:</label> <input
-						class="form-control" type="text" id="name"
-						placeholder="Enter name"> <label
-						class="sr-only form-label" for="position">Position:</label> <input
-						class="form-control" type="text" id="position"
+					<label class="sr-only form-label" for="name">Name:</label> <input class="form-control" type="text"
+						id="name" placeholder="Enter name"> <label class="sr-only form-label"
+						for="position">Position:</label> <input class="form-control" type="text" id="position"
 						placeholder="Enter position">
 					<button class="btn btn-primary" id="submitButton" type="submit">Submit</button>
 				</div>
@@ -55,8 +49,12 @@
 		</div>
 	</div>
 	<br>
-	<br>
+
+	<!-- Employees table list -->
 	<div style="width: 50%; margin: auto" class="card text-center">
+	<div class="card-body">
+		<h5 class="card-title">Employees List</h5>
+		<p>(Click on field to edit)</p>
 		<table class="table" id='list'>
 			<thead class="thead-dark">
 				<tr>
@@ -69,5 +67,8 @@
 			</thead>
 		</table>
 	</div>
+	</div>
+	<div><p><br></p></div>
+
 </body>
 </html>

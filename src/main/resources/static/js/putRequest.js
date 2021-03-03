@@ -1,10 +1,12 @@
 $(document).on("click", ".update", function() {
 	try {
 
+		// Retrieve and store current row info
 		const id = $(this).closest('tr').find("th:first").text();
 		const name = $(this).closest('tr').find("td:nth-child(2) input").val();
 		const position = $(this).closest('tr').find("td:nth-child(3) input").val();
 
+		// Empty field validation
 		if (name.trim() == '' || position.trim() == '') {
 			throw " Name and Position cannot be empty.";
 		}
@@ -22,6 +24,7 @@ $(document).on("click", ".update", function() {
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			success: function(result) {
+				
 				if (result.status == "OK") {
 					alert("Put Successfully!" + "  ---> Employee's New Info:"
 						+ "\nName = " + result.data.name
@@ -30,6 +33,7 @@ $(document).on("click", ".update", function() {
 				} else {
 					console.log("Fail: " + result)
 				}
+				
 			},
 			error: function(e) {
 				alert("Error!")
