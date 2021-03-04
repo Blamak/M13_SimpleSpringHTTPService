@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Services.EmployeeService;
-import com.Java.M13_SimpleSpringHTTPService.message.Response;
+import com.Java.M13_SimpleSpringHTTPService.Response.Response;
 
 @RestController
 public class EmployeeController {
@@ -46,11 +46,13 @@ public class EmployeeController {
 	
 	// ------------ Requests only from url: ---------- //
 	
+	// FIND BY POSITION
 	@GetMapping("/position/{position}")
 	public List<EmployeeDTO> listByPosition(@PathVariable String position) {
 		return employeeService.getByPosition(position);
 	}
 	
+	// FIND BY ID
 	@GetMapping("/id/{id}")
 	public EmployeeDTO listById(@PathVariable Integer id) {
 		return employeeService.getById(id);

@@ -10,7 +10,8 @@ $(function() {
 		try {
 			const name = $("#name").val();
 			const position = $("#position").val();
-
+			
+			// Empty field validation
 			if (name.trim() == '' || position.trim() == '') {
 				throw " Name and Position are mandatory.";
 			}
@@ -27,6 +28,7 @@ $(function() {
 				contentType: "application/json; charset=utf-8",
 				dataType: "json",
 				success: function(result) {
+					
 					if (result.status == "OK") {
 						alert("Post Successfully!" + "  ---> New Employee's Info:"
 							+ "\nName = " + result.data.name

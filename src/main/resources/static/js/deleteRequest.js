@@ -1,6 +1,7 @@
 $(document).on("click", ".delete", function() {
 	// Store the id of the current row
 	const id = $(this).closest('tr').find("td:first").text();
+	
 	ajaxDelete(id);
 });
 

@@ -1,4 +1,9 @@
-package com.Java.M13_SimpleSpringHTTPService.message;
+package com.Java.M13_SimpleSpringHTTPService.Response;
+
+/*
+ * Clase para crear las respuestas del servidor a las peticiones Ajax
+ * 
+ */
 
 public class Response {
 	private String status;
