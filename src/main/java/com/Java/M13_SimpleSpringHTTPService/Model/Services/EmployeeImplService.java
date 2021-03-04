@@ -21,8 +21,10 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public List<EmployeeDTO> getAllEmployees() {
+		
 		List<EmployeeDTO> listEmployeesDTO = null;
 		List<Employee> listEmployees = employeeRepository.findAll();
+		
 		if (listEmployees != null && listEmployees.size() > 0) {
 			listEmployeesDTO = new ArrayList<EmployeeDTO>();
 			for (Employee employee : listEmployees) {
@@ -34,12 +36,14 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public Employee saveEmployee(EmployeeDTO employeeDTO) {
+		
 		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 		newEmployee = employeeRepository.save(newEmployee);
 		return newEmployee;
 	}
 
 
+	// Modify employee info or create a new one
 	@Override
 	public Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
 
@@ -78,7 +82,7 @@ public class EmployeeImplService implements EmployeeService {
 				.orElseThrow(() -> new ParamNotFoundException(id));
 	}
 	
-	
+	// DTO-entity conversion
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
 		Employee emp = new Employee();
 		if (dto.getId() != null) {
@@ -90,6 +94,7 @@ public class EmployeeImplService implements EmployeeService {
 		return emp;
 	}
 
+	// Entity-DTO conversion
 	private EmployeeDTO mapEntitytoDTO(Employee entity) {
 		EmployeeDTO dto = new EmployeeDTO();
 		dto.setId(entity.getId());
