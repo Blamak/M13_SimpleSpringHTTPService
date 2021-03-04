@@ -12,7 +12,7 @@ import com.Java.M13_SimpleSpringHTTPService.Exceptions.ParamNotFoundException;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
 import com.Java.M13_SimpleSpringHTTPService.Model.Repositories.EmployeeRepository;
-import com.Java.M13_SimpleSpringHTTPService.message.Response;
+import com.Java.M13_SimpleSpringHTTPService.Response.Response;
 
 @Service
 public class EmployeeImplService implements EmployeeService {
@@ -51,6 +51,11 @@ public class EmployeeImplService implements EmployeeService {
 				.orElseThrow(() -> new ParamNotFoundException(id));
 	}
 
+	/**
+	 * Method for updating employee info - PUT request
+	 * 
+	 * Creates a new employee if the id sent is new
+	 */
 	@Override
 	public Response replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
 		
@@ -89,7 +94,9 @@ public class EmployeeImplService implements EmployeeService {
 				.filter(list -> !list.isEmpty())
 				.orElseThrow(() -> new ParamNotFoundException(position));
 	}
+	
 
+	// DTO-entity conversion
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
 		Employee emp = new Employee();
 		
@@ -103,6 +110,7 @@ public class EmployeeImplService implements EmployeeService {
 		return emp;
 	}
 
+	// Entity-DTO conversion
 	private EmployeeDTO mapEntitytoDTO(Employee entity) {
 		EmployeeDTO dto = new EmployeeDTO();
 		

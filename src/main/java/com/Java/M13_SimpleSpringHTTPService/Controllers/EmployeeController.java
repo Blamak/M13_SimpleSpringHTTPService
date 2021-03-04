@@ -1,7 +1,6 @@
 package com.Java.M13_SimpleSpringHTTPService.Controllers;
 
 import java.util.List;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Services.EmployeeService;
-import com.Java.M13_SimpleSpringHTTPService.message.Response;
+import com.Java.M13_SimpleSpringHTTPService.Response.Response;
 
 @RestController
 public class EmployeeController {
@@ -24,7 +23,7 @@ public class EmployeeController {
 	// ----------- Requests through Ajax: --------- //
 	
 	@PostMapping("/save") // CREATE
-	public Response newEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+	public Response newEmployee(@RequestBody EmployeeDTO employeeDTO) {
 		return employeeService.saveEmployee(employeeDTO);
 	}
 	
@@ -48,11 +47,13 @@ public class EmployeeController {
 
 	// ------------ Requests only from url: ---------- //
 	
+	// FIND BY POSITION
 	@GetMapping("/position/{position}")
 	public List<EmployeeDTO> listByPosition(@PathVariable String position) {
 		return employeeService.getByPosition(position);
 	}
 	
+	// FIND BY id
 	@GetMapping("/id/{id}")
 	public EmployeeDTO listById(@PathVariable Integer id) {
 		return employeeService.getEmployeeById(id);

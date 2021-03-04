@@ -15,7 +15,7 @@ function ajaxPost() {
 		const name = $("#name").val();
 		const position = $("#position").val();
 
-		// Empty filed validation
+		// Empty field validation
 		if (name.trim() == '' || position.trim() == '') {
 			throw " Name and Position are mandatory.";
 		}

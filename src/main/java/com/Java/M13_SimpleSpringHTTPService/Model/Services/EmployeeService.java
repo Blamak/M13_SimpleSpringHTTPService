@@ -2,7 +2,7 @@ package com.Java.M13_SimpleSpringHTTPService.Model.Services;
 
 import java.util.List;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
-import com.Java.M13_SimpleSpringHTTPService.message.Response;
+import com.Java.M13_SimpleSpringHTTPService.Response.Response;
 
 public interface EmployeeService {
 	

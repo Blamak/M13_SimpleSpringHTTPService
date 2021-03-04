@@ -7,6 +7,7 @@ function ajaxGet() {
 		type: "GET",
 		url: "/employees",
 		success: function(result) {
+			
 			if (result.status == "OK") {
 				$('#list').append('<tbody>');
 				$.each(result.data, function(index, employee) {
