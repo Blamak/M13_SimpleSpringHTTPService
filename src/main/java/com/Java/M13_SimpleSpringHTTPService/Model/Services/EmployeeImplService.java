@@ -39,9 +39,9 @@ public class EmployeeImplService implements EmployeeService {
 	@Override
 	public Response saveEmployee(EmployeeDTO employeeDTO) {
 		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
-		newEmployee = employeeRepository.save(newEmployee);
+		employeeRepository.save(newEmployee);
 		
-		Response response = new Response("OK", newEmployee);
+		Response response = new Response("OK", employeeDTO);
 		return response;
 	}
 
@@ -51,12 +51,12 @@ public class EmployeeImplService implements EmployeeService {
 	 * Creates a new employee if the id sent is new
 	 */
 	@Override
-	public Response replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
+	public Response replaceEmployee(EmployeeDTO employeeDTO, long id) {
 		
 		return employeeRepository.findById(id).map(employee -> {
 			employee.setName(employeeDTO.getName());
 			employee.setPosition(employeeDTO.getPosition());
-			employeeRepository.save(employee);
+			employeeRepository.update(employee);
 			
 			Response response = new Response("OK", employee);
 			return response;
@@ -72,7 +72,7 @@ public class EmployeeImplService implements EmployeeService {
 	}
 
 	@Override
-	public Response deleteById(Integer id) {
+	public Response deleteById(long id) {
 		Optional<Employee> removedEmployee = employeeRepository.findById(id);
 		employeeRepository.deleteById(id);
 		Response response = new Response("OK", removedEmployee);
@@ -80,15 +80,19 @@ public class EmployeeImplService implements EmployeeService {
 	}
 
 	@Override
-	public List<EmployeeDTO> getByPosition(String position) {
+	public Response getByPosition(String position) {
 
-		return Optional.ofNullable(employeeRepository.findByPosition(position).stream()
+		List<EmployeeDTO> listEmp = Optional.ofNullable(employeeRepository.findByPosition(position).stream()
 				.map(employee -> this.mapEntitytoDTO(employee)).filter(Objects::nonNull).collect(Collectors.toList()))
 				.filter(list -> !list.isEmpty()).orElseThrow(() -> new ParamNotFoundException(position));
+		
+		Response response = new Response("Ok", listEmp);
+		
+		return response;
 	}
 
 	@Override
-	public EmployeeDTO getById(Integer id) {
+	public EmployeeDTO getById(long id) {
 		return employeeRepository.findById(id)
 				.map(employee -> this.mapEntitytoDTO(employee))
 				.orElseThrow(() -> new ParamNotFoundException(id));
@@ -97,7 +101,7 @@ public class EmployeeImplService implements EmployeeService {
 	// DTO-entity conversion
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
 		Employee emp = new Employee();
-		if (dto.getId() != null) {
+		if (dto.getId() != 0L) {
 			emp.setId(dto.getId());
 		}
 		emp.setName(dto.getName());

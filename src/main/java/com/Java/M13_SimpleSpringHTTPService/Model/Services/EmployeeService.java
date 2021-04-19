@@ -10,11 +10,11 @@ public interface EmployeeService {
 	
 	Response saveEmployee(EmployeeDTO employeeDTO);
 	
-	Response replaceEmployee(EmployeeDTO employeeDTO, Integer id);
+	Response replaceEmployee(EmployeeDTO employeeDTO, long id);
 	
-	Response deleteById(Integer id);
+	Response deleteById(long id);
 
-	EmployeeDTO getById(Integer id);
-	List<EmployeeDTO> getByPosition(String position);
+	EmployeeDTO getById(long id);
+	Response getByPosition(String position);
 
 }

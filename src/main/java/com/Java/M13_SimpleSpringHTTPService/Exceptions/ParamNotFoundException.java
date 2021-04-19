@@ -10,7 +10,7 @@ public class ParamNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public ParamNotFoundException(Integer id) {
+	public ParamNotFoundException(long id) {
 		super("Could not find employee " + id);
 	}
 	

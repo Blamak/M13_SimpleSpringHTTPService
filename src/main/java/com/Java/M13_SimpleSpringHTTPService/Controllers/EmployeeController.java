@@ -33,13 +33,13 @@ public class EmployeeController {
 	}
 	
 	@PutMapping("/employees/{id}") // UPDATE
-	public Response updateEmployee(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
+	public Response updateEmployee(@RequestBody EmployeeDTO employeeDTO, @PathVariable long id) {
 		return employeeService.replaceEmployee(employeeDTO, id);
 	}
 	
 	
 	@DeleteMapping("/employees/{id}") // DELETE
-	public Response deleteEmployee(@PathVariable Integer id) {
+	public Response deleteEmployee(@PathVariable long id) {
 		return employeeService.deleteById(id);
 	}
 	
@@ -48,13 +48,13 @@ public class EmployeeController {
 	
 	// FIND BY POSITION
 	@GetMapping("/position/{position}")
-	public List<EmployeeDTO> listByPosition(@PathVariable String position) {
+	public Response listByPosition(@PathVariable String position) {
 		return employeeService.getByPosition(position);
 	}
 	
 	// FIND BY ID
 	@GetMapping("/id/{id}")
-	public EmployeeDTO listById(@PathVariable Integer id) {
+	public EmployeeDTO listById(@PathVariable long id) {
 		return employeeService.getById(id);
 	}
 }

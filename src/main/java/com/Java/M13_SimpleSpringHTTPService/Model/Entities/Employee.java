@@ -1,29 +1,26 @@
 package com.Java.M13_SimpleSpringHTTPService.Model.Entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
-import javax.persistence.Id;
-
-@Entity
-@Table(name = "Employees")
 public class Employee {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
-	@Column(name = "Name", length = 100, unique = true, nullable = false)
+	private long id;
 	private String name;
-	@Column(name = "Position")
 	private String position;
+	
+	public Employee() {
+		
+	}
+	
+	public Employee(long id, String name, String position) {
+		this.id = id;
+		this.name = name;
+		this.position = position;
+	}
 
-	public Integer getId() {
+
+	public long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {
