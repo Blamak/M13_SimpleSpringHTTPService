@@ -21,7 +21,6 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public List<EmployeeDTO> getAllEmployees() {
-		
 		List<EmployeeDTO> listEmployeesDTO = null;
 		List<Employee> listEmployees = employeeRepository.findAll();
 		
@@ -31,42 +30,35 @@ public class EmployeeImplService implements EmployeeService {
 				listEmployeesDTO.add(this.mapEntitytoDTO(employee));
 			}
 		}
+		
 		return listEmployeesDTO;
 	}
 
 	@Override
 	public Employee saveEmployee(EmployeeDTO employeeDTO) {
-		
 		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
 		newEmployee = employeeRepository.save(newEmployee);
+
 		return newEmployee;
 	}
 
-
-	// Modify employee info or create a new one
 	@Override
 	public Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
-
 		return employeeRepository.findById(id).map(employee -> {
 			employee.setName(employeeDTO.getName());
 			employee.setPosition(employeeDTO.getPosition());
 			return employeeRepository.save(employee);
-		}).orElseGet(() -> {
-			employeeDTO.setId(id);
-			Employee newEmployee = this.mapDtotoEntity(employeeDTO);
-			return employeeRepository.save(newEmployee);
-		});
+		}).orElseThrow(() -> new ParamNotFoundException(id));
 
 	}
 
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteEmployeeById(Integer id) {
 		employeeRepository.deleteById(id);
 	}
 
 	@Override
-	public List<EmployeeDTO> getByPosition(String position) {
-
+	public List<EmployeeDTO> getEmployeeByPosition(String position) {
 		return Optional.ofNullable(employeeRepository.findByPosition(position).stream()
 				.map(employee -> this.mapEntitytoDTO(employee))
 					.filter(Objects::nonNull).collect(Collectors.toList()))
@@ -76,14 +68,15 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public EmployeeDTO getEmployeeById(Integer id) {
-		
 		return employeeRepository.findById(id)
 				.map(employee -> this.mapEntitytoDTO(employee))
 				.orElseThrow(() -> new ParamNotFoundException(id));
 	}
 	
-	// DTO-entity conversion
-	private Employee mapDtotoEntity(EmployeeDTO dto) {
+	
+	// ------------ DTO←→Entity conversions: ---------- //
+	
+	private Employee mapDtotoEntity(EmployeeDTO dto) { // DTO-entity conversion
 		Employee emp = new Employee();
 		if (dto.getId() != null) {
 			emp.setId(dto.getId());
@@ -95,11 +88,12 @@ public class EmployeeImplService implements EmployeeService {
 	}
 
 	// Entity-DTO conversion
-	private EmployeeDTO mapEntitytoDTO(Employee entity) {
+	private EmployeeDTO mapEntitytoDTO(Employee entity) { // Entity-DTO conversion
 		EmployeeDTO dto = new EmployeeDTO();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setPosition(entity.getPosition());
+		
 		return dto;
 	}
 

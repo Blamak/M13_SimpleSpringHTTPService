@@ -9,44 +9,46 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
 import com.Java.M13_SimpleSpringHTTPService.Model.Services.EmployeeService;
 
 @RestController
+@RequestMapping("employees")
 public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
 
-	@PostMapping("/employees")  // CREATE
+	@PostMapping("")  // CREATE
 	public Employee newEmployee(@RequestBody EmployeeDTO employeeDTO) {
 		return employeeService.saveEmployee(employeeDTO);
 	}
 	
-	@GetMapping("/employees")  // READ
+	@GetMapping("")  // READ
 	public List<EmployeeDTO> listEmployees() {
 		return employeeService.getAllEmployees();
 	}
 	
-	@PutMapping("/employees/{id}") // UPDATE
+	@PutMapping("/{id}") // UPDATE
 	public Employee updateEmployee(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
 		return employeeService.replaceEmployee(employeeDTO, id);
 	}
 	
-	@DeleteMapping("/employees/{id}") // DELETE
+	@DeleteMapping("/{id}") // DELETE
 	public void deleteEmployee(@PathVariable Integer id) {
-		employeeService.deleteById(id);
+		employeeService.deleteEmployeeById(id);
 	}
 	
-	
-	@GetMapping("/employees/position/{position}") // FIND BY POSITION
+
+	@GetMapping("/position/{position}") // FIND BY POSITION
 	public List<EmployeeDTO> listByPosition(@PathVariable String position) {
-		return employeeService.getByPosition(position);
+		return employeeService.getEmployeeByPosition(position);
 	}
 
-	@GetMapping("/employees/id/{id}") // FIND BY ID
+	@GetMapping("/id/{id}") // FIND BY ID
 	public EmployeeDTO listById(@PathVariable Integer id) {
 		return employeeService.getEmployeeById(id);
 	}

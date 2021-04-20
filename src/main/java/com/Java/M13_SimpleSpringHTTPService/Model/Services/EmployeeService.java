@@ -7,15 +7,12 @@ import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
 public interface EmployeeService {
 	
 	List<EmployeeDTO> getAllEmployees();
-	
-	EmployeeDTO getEmployeeById(Integer id);
-	
 	Employee saveEmployee(EmployeeDTO employeeDTO);
-	
 	Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id);
+	void deleteEmployeeById(Integer id);
 	
-	void deleteById(Integer id);
 	
-	List<EmployeeDTO> getByPosition(String position);
+	List<EmployeeDTO> getEmployeeByPosition(String position);
+	EmployeeDTO getEmployeeById(Integer id);
 
 }
