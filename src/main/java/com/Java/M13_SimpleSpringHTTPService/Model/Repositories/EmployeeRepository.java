@@ -3,12 +3,8 @@ package com.Java.M13_SimpleSpringHTTPService.Model.Repositories;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
@@ -16,70 +12,70 @@ import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
 @Repository
 public class EmployeeRepository {
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 
-	class EmployeeRowMapper implements RowMapper<Employee> {
-		@Override
-		public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Employee employee = new Employee();
-			employee.setId(rs.getLong("id"));
-			employee.setName(rs.getString("name"));
-			employee.setPosition(rs.getString("position"));
-			return employee;
-		}
+	@Autowired
+	public EmployeeRepository(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	private Employee mapRowToEmployee(ResultSet resultSet, int rowNum) throws SQLException {
+		/*
+		 * This method is an implementation of the functional interface RowMapper.
+		 * It is used to map each row of a ResultSet to an object
+		 */
+		Employee employee = new Employee();
+		employee.setId(resultSet.getLong("id"));
+		employee.setName(resultSet.getString("name"));
+		employee.setPosition(resultSet.getString("position"));
+		
+		return employee;
 	}
 
 	public List<Employee> findAll() {
-		return jdbcTemplate.query("select * from employees", new EmployeeRowMapper());
+		String sqlQuery = "select * from employees";
+
+		return jdbcTemplate.query(sqlQuery, this::mapRowToEmployee);
 	}
 
-	public Optional<Employee> findById(long id) {
-		return jdbcTemplate.queryForObject(
-                "select * from employees where id = ?",
-                new Object[]{id},
-                (rs, rowNum) ->
-                        Optional.of(new Employee(
-                                rs.getLong("id"),
-                                rs.getString("name"),
-                                rs.getString("position")
-                        ))
-        );
-//
-//		String query = "SELECT * FROM EMPLOYEES WHERE ID = ?";
-//
-//		Employee employee = jdbcTemplate.queryForObject(query, new EmployeeRowMapper(), id);
-//
-//		return employee;
+	public Employee findById(long id) {
+		String sqlQuery = "select * from employees where id = ?";
+
+		return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToEmployee, id);
 
 	}
-	
 
-	    public List<Employee> findByPosition(String position) {
-	        return jdbcTemplate.query(
-	                "select * from employees where position = ?",
-	                new Object[]{"%" + position},
-	                (rs, rowNum) ->
-	                        new Employee(
-	                                rs.getLong("id"),
-	                                rs.getString("name"),
-	                                rs.getString("position")
-	                        )
-	        );
-	    }
-
-	public int deleteById(long id) {
-		return jdbcTemplate.update("delete from employees where id=?", new Object[] { id });
+	public List<Employee> findByPosition(String position) {
+		String sqlQuery = "select * from employees where position = ?";
+		return jdbcTemplate.query(sqlQuery, this::mapRowToEmployee, position);
 	}
 
-	public int save(Employee employee) {
-		return jdbcTemplate.update("insert into employees (name, position) " + "values(?, ?)",
-				new Object[] { employee.getName(), employee.getPosition() });
+	/*
+	 * The defined delete statement is passed to the update() method. 
+	 * The method returns an int, which indicates how many records were affected by the operation.
+	 * If the return value is greater than 0, one record was deleted.
+	 */
+	public boolean deleteById(long id) {
+		String sqlQuery = "delete from employees where id = ?";
+		
+		return jdbcTemplate.update(sqlQuery, id) > 0;
 	}
 
-	public int update(Employee employee) {
-		return jdbcTemplate.update("update employees " + " set name = ?, position = ? " + " where id = ?",
-				employee.getName(), employee.getPosition(), employee.getId());
+	public void save(Employee employee) {
+		String sqlQuery = "insert into employees (name, position) " + "values(?, ?)";
+		
+		jdbcTemplate.update(sqlQuery,
+				            employee.getName(),
+				            employee.getPosition());
+	}
+
+	public void update(Employee employee) {
+		String sqlQuery = "update employees " + " set name = ?, position = ? " + " where id = ?";
+
+		jdbcTemplate.update(sqlQuery, 
+				            employee.getName(),
+				            employee.getPosition(),
+				            employee.getId());
 	}
 
 }
