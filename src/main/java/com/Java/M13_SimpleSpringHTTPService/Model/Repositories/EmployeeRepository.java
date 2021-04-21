@@ -24,12 +24,11 @@ public class EmployeeRepository {
 		 * This method is an implementation of the functional interface RowMapper.
 		 * It is used to map each row of a ResultSet to an object
 		 */
-		Employee employee = new Employee();
-		employee.setId(resultSet.getLong("id"));
-		employee.setName(resultSet.getString("name"));
-		employee.setPosition(resultSet.getString("position"));
-		
-		return employee;
+		return Employee.builder()
+				.id(resultSet.getLong("id"))
+				.name(resultSet.getString("name"))
+				.position(resultSet.getString("position"))
+				.build();
 	}
 
 	public List<Employee> findAll() {
@@ -39,10 +38,9 @@ public class EmployeeRepository {
 	}
 
 	public Employee findById(long id) {
-		String sqlQuery = "select * from employees where id = ?";
+		String sqlQuery = "select id, name, position " + "from employees where id = ?";
 
 		return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToEmployee, id);
-
 	}
 
 	public List<Employee> findByPosition(String position) {
@@ -50,21 +48,16 @@ public class EmployeeRepository {
 		return jdbcTemplate.query(sqlQuery, this::mapRowToEmployee, position);
 	}
 
-	/*
-	 * The defined delete statement is passed to the update() method. 
-	 * The method returns an int, which indicates how many records were affected by the operation.
-	 * If the return value is greater than 0, one record was deleted.
-	 */
-	public boolean deleteById(long id) {
+	public int deleteById(long id) {
 		String sqlQuery = "delete from employees where id = ?";
 		
-		return jdbcTemplate.update(sqlQuery, id) > 0;
+		return jdbcTemplate.update(sqlQuery, id);
 	}
 
-	public void save(Employee employee) {
+	public int save(Employee employee) {
 		String sqlQuery = "insert into employees (name, position) " + "values(?, ?)";
 		
-		jdbcTemplate.update(sqlQuery,
+		return jdbcTemplate.update(sqlQuery,
 				            employee.getName(),
 				            employee.getPosition());
 	}

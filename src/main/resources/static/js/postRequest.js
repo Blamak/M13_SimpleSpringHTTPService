@@ -23,7 +23,7 @@ $(function() {
 			
 			$.ajax({
 				type: "POST",
-				url: '/save',
+				url: "/employees/",
 				data: JSON.stringify(formData),
 				contentType: "application/json; charset=utf-8",
 				dataType: "json",

@@ -6,8 +6,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 import com.Java.M13_SimpleSpringHTTPService.Exceptions.ParamNotFoundException;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
@@ -45,10 +50,6 @@ public class EmployeeImplService implements EmployeeService {
 		return response;
 	}
 
-	/**
-	 * Method for updating employee info - PUT request Creates a new employee if the
-	 * id sent is new
-	 */
 	@Override
 	public Response replaceEmployee(EmployeeDTO employeeDTO, long id) {
 
@@ -62,74 +63,60 @@ public class EmployeeImplService implements EmployeeService {
 		Response response = new Response("OK", empDTO);
 		return response;
 
-//				.map(employee -> {
-//			employee.setName(employeeDTO.getName());
-//			employee.setPosition(employeeDTO.getPosition());
-//			
-//			Response response = new Response("OK", employee);
-//			return response;
-//			
-//		}).orElseGet(() -> {
-//			Employee newEmployee = this.mapDtotoEntity(employeeDTO);
-//			employeeRepository.save(newEmployee);
-//			
-//			Response response = new Response("OK", newEmployee);
-//			return response;
-//		});
-
 	}
 
 	@Override
 	public Response deleteById(long id) {
-		Employee removedEmployee = (Employee) employeeRepository.findById(id);
+		Employee removedEmployee = employeeRepository.findById(id);
 		employeeRepository.deleteById(id);
+
 		Response response = new Response("OK", removedEmployee);
 		return response;
 	}
 
 	@Override
-	public Response getByPosition(String position) {
+	public List<EmployeeDTO> getByPosition(String position) {
 
-		List<EmployeeDTO> listEmp = Optional.ofNullable(employeeRepository.findByPosition(position).stream()
+		return Optional.ofNullable(employeeRepository.findByPosition(position).stream()
 				.map(employee -> this.mapEntitytoDTO(employee)).filter(Objects::nonNull).collect(Collectors.toList()))
 				.filter(list -> !list.isEmpty()).orElseThrow(() -> new ParamNotFoundException(position));
 
-		Response response = new Response("Ok", listEmp);
-
-		return response;
+//		Response response = new Response("Ok", listEmp);
+//
+//		return response;
 	}
 
 	@Override
-	public EmployeeDTO getById(long id) {
-		Employee emp = employeeRepository.findById(id);
+	public Response getById(long id) {
+		try {
+			EmployeeDTO empDTO = this.mapEntitytoDTO(employeeRepository.findById(id));
 
-		return this.mapEntitytoDTO(emp);
-//				.map(employee -> this.mapEntitytoDTO(employee));
-//				.orElseThrow(() -> new ParamNotFoundException(id));
-//		return employeeRepository.findById(id)
-//				.map(employee -> this.mapEntitytoDTO(employee))
-//				.orElseThrow(() -> new ParamNotFoundException(id));
+			Response response = new Response("OK", empDTO);
+			return response;
+
+		} catch (EmptyResultDataAccessException e) {
+			Response response = new Response("Error", new ParamNotFoundException(id).getMessage());
+			return response;
+		}
+
 	}
 
 	// DTO-entity conversion
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
-		Employee emp = new Employee();
-		if (dto.getId() != 0L) {
-			emp.setId(dto.getId());
-		}
-		emp.setName(dto.getName());
-		emp.setPosition(dto.getPosition());
-
-		return emp;
+		return Employee.builder()
+				.id(dto.getId())
+				.name(dto.getName())
+				.position(dto.getPosition())
+				.build();
 	}
 
 	// Entity-DTO conversion
 	private EmployeeDTO mapEntitytoDTO(Employee entity) {
-		EmployeeDTO dto = new EmployeeDTO();
-		dto.setId(entity.getId());
-		dto.setName(entity.getName());
-		dto.setPosition(entity.getPosition());
-		return dto;
+		return EmployeeDTO.builder()
+				.id(entity.getId())
+				.name(entity.getName())
+				.position(entity.getPosition())
+				.build();
 	}
 
 }
