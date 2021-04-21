@@ -5,7 +5,14 @@ public class EmployeeDTO {
 	private Integer id;
 	private String name;
 	private String position;
+	private int salary;
 	
+	public int getSalary() {
+		this.salary = PositionEnum.valueOf(this.position).showSalary();
+		return this.salary;
+	}
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -30,6 +37,4 @@ public class EmployeeDTO {
 		this.position = position;
 	}
 
-	
-	
 }

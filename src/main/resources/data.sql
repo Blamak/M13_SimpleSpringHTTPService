@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS Employees(
 INSERT INTO Employees (Name, Position) VALUES
 ('Aliko', 'CEO'), 
 ('Bill', 'CTO'),
-('Folrunsho', 'Manager');
+('Folrunsho', 'CFO');

@@ -1,9 +1,7 @@
 package com.Java.M13_SimpleSpringHTTPService.Exceptions;
 
 /**
- * Clase para crear una respuesta de error personalizada
- * para las peticiones de búsqueda por id y por posición
- * en caso de parámetro inexistente (id o posición)
+ * Customized message for ParamNotFoundException
  *
  */
 public class ParamNotFoundException extends RuntimeException {
@@ -16,7 +14,7 @@ public class ParamNotFoundException extends RuntimeException {
 
 	
 	public ParamNotFoundException(String position) {
-		super("Could not find position " + position);
+		super("The job position \'" + position + "\' does not exist in our company");
 	}
 
 }
