@@ -6,13 +6,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import com.Java.M13_SimpleSpringHTTPService.Exceptions.ParamNotFoundException;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
@@ -80,10 +76,6 @@ public class EmployeeImplService implements EmployeeService {
 		return Optional.ofNullable(employeeRepository.findByPosition(position).stream()
 				.map(employee -> this.mapEntitytoDTO(employee)).filter(Objects::nonNull).collect(Collectors.toList()))
 				.filter(list -> !list.isEmpty()).orElseThrow(() -> new ParamNotFoundException(position));
-
-//		Response response = new Response("Ok", listEmp);
-//
-//		return response;
 	}
 
 	@Override
