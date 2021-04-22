@@ -9,7 +9,7 @@ public interface EmployeeService {
 	List<EmployeeDTO> getAllEmployees();
 	Employee saveEmployee(EmployeeDTO employeeDTO);
 	Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id);
-	void deleteEmployeeById(Integer id);
+	void deleteEmployee(Integer id);
 	
 	
 	List<EmployeeDTO> getEmployeeByPosition(String position);

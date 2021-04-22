@@ -65,14 +65,13 @@ public class EmployeeImplService implements EmployeeService {
 				employee.setPosition(employeeDTO.getPosition());
 				
 				return employeeRepository.save(employee);
-				
 			}).orElseThrow(() -> new ParamNotFoundException(id));
 
 		}
 	}
 
 	@Override
-	public void deleteEmployeeById(Integer id) {
+	public void deleteEmployee(Integer id) {
 		if (employeeRepository.findById(id).isEmpty()) {
 			throw new ParamNotFoundException(id);
 		} else {
@@ -100,7 +99,10 @@ public class EmployeeImplService implements EmployeeService {
 
 	// ---------------------------- DTO←→Entity conversions: -------------------------------- //
 
-	private Employee mapDtotoEntity(EmployeeDTO dto) { // DTO-entity conversion
+	/*
+	 *  DTO-entity conversion
+	 */
+	private Employee mapDtotoEntity(EmployeeDTO dto) { 
 		Employee emp = new Employee();
 		if (dto.getId() != null) {
 			emp.setId(dto.getId());
@@ -111,8 +113,10 @@ public class EmployeeImplService implements EmployeeService {
 		return emp;
 	}
 
-	// Entity-DTO conversion
-	private EmployeeDTO mapEntitytoDTO(Employee entity) { // Entity-DTO conversion
+	/*
+	 * Entity-DTO conversion
+	 */
+	private EmployeeDTO mapEntitytoDTO(Employee entity) {
 		EmployeeDTO dto = new EmployeeDTO();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());

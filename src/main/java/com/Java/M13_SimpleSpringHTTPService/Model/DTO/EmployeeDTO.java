@@ -7,9 +7,12 @@ public class EmployeeDTO {
 	private String position;
 	private int salary;
 	
+	/*
+	 * Getter that calls the enum method to get the corresponding salary
+	 */
 	public int getSalary() {
-		this.salary = PositionEnum.valueOf(this.position).showSalary();
-		return this.salary;
+		salary = PositionEnum.valueOf(this.position).showSalary();
+		return salary;
 	}
 
 
