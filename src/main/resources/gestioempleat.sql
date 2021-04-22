@@ -36,7 +36,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (2,'Bill','CTO'),(3,'Bill','CEO'),(7,'Mike','CFO'),(11,'Blamakino','CIO');
+INSERT INTO `employees` VALUES (1,'Bill','CTO'),(2,'Folrushno','CEO'),(3,'Mike','CFO'),(4,'Blamakino','CIO');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-22 17:28:47
+-- Dump completed on 2021-04-22 17:32:23
