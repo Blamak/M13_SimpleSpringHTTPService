@@ -10,5 +10,5 @@ public class EmployeeDTO {
 	private long id;
 	private String name;
 	private String position;
-	
+	private int salary;
 }

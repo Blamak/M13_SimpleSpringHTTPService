@@ -20,10 +20,6 @@ public class EmployeeRepository {
 	}
 
 	private Employee mapRowToEmployee(ResultSet resultSet, int rowNum) throws SQLException {
-		/*
-		 * This method is an implementation of the functional interface RowMapper.
-		 * It is used to map each row of a ResultSet to an object
-		 */
 		return Employee.builder()
 				.id(resultSet.getLong("id"))
 				.name(resultSet.getString("name"))
@@ -33,13 +29,11 @@ public class EmployeeRepository {
 
 	public List<Employee> findAll() {
 		String sqlQuery = "select * from employees";
-
 		return jdbcTemplate.query(sqlQuery, this::mapRowToEmployee);
 	}
 
 	public Employee findById(long id) {
 		String sqlQuery = "select id, name, position " + "from employees where id = ?";
-
 		return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToEmployee, id);
 	}
 
@@ -50,13 +44,11 @@ public class EmployeeRepository {
 
 	public int deleteById(long id) {
 		String sqlQuery = "delete from employees where id = ?";
-		
 		return jdbcTemplate.update(sqlQuery, id);
 	}
 
 	public int save(Employee employee) {
 		String sqlQuery = "insert into employees (name, position) " + "values(?, ?)";
-		
 		return jdbcTemplate.update(sqlQuery,
 				            employee.getName(),
 				            employee.getPosition());
@@ -64,7 +56,6 @@ public class EmployeeRepository {
 
 	public void update(Employee employee) {
 		String sqlQuery = "update employees " + " set name = ?, position = ? " + " where id = ?";
-
 		jdbcTemplate.update(sqlQuery, 
 				            employee.getName(),
 				            employee.getPosition(),

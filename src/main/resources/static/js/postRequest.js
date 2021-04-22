@@ -10,7 +10,7 @@ $(function() {
 		try {
 			const name = $("#name").val();
 			const position = $("#position").val();
-			
+
 			// Empty field validation
 			if (name.trim() == '' || position.trim() == '') {
 				throw " Name and Position are mandatory.";
@@ -20,7 +20,7 @@ $(function() {
 				name: name,
 				position: position
 			}
-			
+
 			$.ajax({
 				type: "POST",
 				url: "/employees/",
@@ -28,11 +28,14 @@ $(function() {
 				contentType: "application/json; charset=utf-8",
 				dataType: "json",
 				success: function(result) {
-					
+
 					if (result.status == "OK") {
 						alert("Post Successfully!" + "  ---> New Employee's Info:"
 							+ "\nName = " + result.data.name
 							+ " , Position = " + result.data.position)
+						location.reload();
+					} else if (result.status == "Error") {
+						alert(`"${position}" is not a valid job position`);
 						location.reload();
 					} else {
 						console.log("Fail: " + result)

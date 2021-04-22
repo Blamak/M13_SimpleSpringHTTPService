@@ -8,7 +8,7 @@ $(document).ready(function() {
 			success: function(result) {
 
 				if (result.status == "OK") {
-					$('#list').append('<thead>' + '<tr> <th>Id</th> <th>Name</th> <th>Position</th>' + '<th> </th>' + '</thead>');
+					$('#list').append('<thead>' + '<tr> <th>Id</th> <th>Name</th> <th>Position</th> <th>Salary</th>' + '<th> </th>' + '</thead>');
 
 					$.each(result.data, function(index, employee) {
 						//Build table row
@@ -16,6 +16,7 @@ $(document).ready(function() {
 						row.append($('<td>').append(employee.id));
 						row.append($('<td>').append(`<input value=${employee.name}></input>`));
 						row.append($('<td>').append(`<input value=${employee.position}></input>`));
+						row.append($('<td>').append(`<input value=${employee.salary} readonly></input>`));
 						row.append($('<td>').append(`<button class="delete">Delete</button`).append(`<button class="update">Update</button`));
 
 						$('#list').append(row);

@@ -24,23 +24,25 @@ $(document).on("click", ".update", function() {
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			success: function(result) {
-				
+
 				if (result.status == "OK") {
 					alert("Put Successfully!" + "  ---> Employee's New Info:"
 						+ "\nName = " + result.data.name
 						+ " , Position = " + result.data.position)
 					location.reload();
+				} else if (result.status == "Error") {
+					alert(`"${position}" is not a valid job position`);
+					location.reload();
 				} else {
 					console.log("Fail: " + result)
 				}
-				
 			},
 			error: function(e) {
 				alert("Error!")
 				console.log("ERROR: ", e);
 			}
 		})
-		
+
 	} catch (e) {
 		alert(e);
 	}
