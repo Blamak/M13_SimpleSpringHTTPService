@@ -3,8 +3,6 @@ package com.Java.M13_SimpleSpringHTTPService.Model.Services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +40,9 @@ public class EmployeeImplService implements EmployeeService {
 	@Override
 	public Response saveEmployee(EmployeeDTO employeeDTO) {
 		// check if the body's request "position" exists in the enum PositionsEnum
-		Boolean positionExists = (Arrays.stream(PositionsEnum.values())
-				.anyMatch((p) -> p.name().equals(employeeDTO.getPosition())));
+		Boolean positionExists = Arrays.stream(PositionsEnum.values())
+									   .anyMatch( position -> position.name().equals(employeeDTO.getPosition()) );
+		
 		if (!positionExists) {
 			Response response = new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
 			return response;
@@ -59,38 +58,57 @@ public class EmployeeImplService implements EmployeeService {
 	@Override
 	public Response replaceEmployee(EmployeeDTO employeeDTO, long id) {
 		// check if the body's request "position" exists in the enum PositionsEnum
-		Boolean positionExists = (Arrays.stream(PositionsEnum.values())
-				.anyMatch((p) -> p.name().equals(employeeDTO.getPosition())));
-		
+		Boolean positionExists = Arrays.stream(PositionsEnum.values())
+								       .anyMatch( position -> position.name().equals(employeeDTO.getPosition()) );
 		if (!positionExists) {
 			Response response = new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
 			return response;
 		}
 
-		Employee emp = employeeRepository.findById(id);
-		emp.setName(employeeDTO.getName());
-		emp.setPosition(employeeDTO.getPosition());
-		employeeRepository.update(emp);
-
-		EmployeeDTO empDTO = this.mapEntitytoDTO(emp);
-		Response response = new Response("OK", empDTO);
-		return response;
+		// modify employee's data - error response for non-existent id
+		try {
+			Employee employee = employeeRepository.findById(id);
+			employee.setName(employeeDTO.getName());
+			employee.setPosition(employeeDTO.getPosition());
+			employeeRepository.update(employee);
+			
+			EmployeeDTO empDTO = this.mapEntitytoDTO(employee);
+			Response response = new Response("OK", empDTO);
+			return response;
+		} catch (EmptyResultDataAccessException e) {
+			Response response = new Response("Error", new ParamNotFoundException(id).getMessage());
+			return response;
+		}
 	}
 
 	@Override
 	public Response deleteById(long id) {
-		Employee removedEmployee = employeeRepository.findById(id);
-		employeeRepository.deleteById(id);
+		try {			
+			Employee removedEmployee = employeeRepository.findById(id);
+			employeeRepository.deleteById(id);			
+			Response response = new Response("OK", removedEmployee);
+			return response;
+		} catch (EmptyResultDataAccessException e) {
+			Response response = new Response("Error", new ParamNotFoundException(id).getMessage());
+			return response;
+		}
 
-		Response response = new Response("OK", removedEmployee);
-		return response;
 	}
 
 	@Override
-	public List<EmployeeDTO> getByPosition(String position) {
-		return Optional.ofNullable(employeeRepository.findByPosition(position).stream()
-				.map(employee -> this.mapEntitytoDTO(employee)).filter(Objects::nonNull).collect(Collectors.toList()))
-				.filter(list -> !list.isEmpty()).orElseThrow(() -> new ParamNotFoundException(position));
+	public Response getByPosition(String position) {
+		List<EmployeeDTO> listByPosition = employeeRepository.findByPosition(position).stream()
+				.map(employee -> this.mapEntitytoDTO(employee))
+				.collect(Collectors.toList());
+		
+		if (listByPosition.isEmpty()) {
+			// error response if position doesn't exist (= empty list)
+			Response response = new Response("Error", new ParamNotFoundException(position).getMessage());
+			return response;
+		} else {		
+			Response response = new Response("Ok", listByPosition);
+			return response;
+		}
 	}
 
 	@Override
@@ -108,7 +126,11 @@ public class EmployeeImplService implements EmployeeService {
 
 	// DTO-entity conversion
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
-		return Employee.builder().id(dto.getId()).name(dto.getName()).position(dto.getPosition()).build();
+		return Employee.builder()
+				.id(dto.getId())
+				.name(dto.getName())
+				.position(dto.getPosition())
+				.build();
 	}
 
 	// Entity-DTO conversion
@@ -117,8 +139,12 @@ public class EmployeeImplService implements EmployeeService {
 		String positionReturned = entity.getPosition();
 		int employeeSalary = PositionsEnum.valueOf(positionReturned).showSalary();
 
-		return EmployeeDTO.builder().id(entity.getId()).name(entity.getName()).position(positionReturned)
-				.salary(employeeSalary).build();
+		return EmployeeDTO.builder()
+				.id(entity.getId())
+				.name(entity.getName())
+				.position(positionReturned)
+				.salary(employeeSalary)
+				.build();
 	}
 
 }

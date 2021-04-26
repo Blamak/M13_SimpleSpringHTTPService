@@ -3,7 +3,7 @@ package com.Java.M13_SimpleSpringHTTPService.Model.DTO;
 /**
  * enum to define every possible job position and its corresponding remuneration
  * 
- * The constants are not stored in database, only showed though the DTO
+ * The constants are not stored in database, only showed through the DTO
  */
 public enum PositionsEnum {
 	

@@ -1,7 +1,5 @@
 package com.Java.M13_SimpleSpringHTTPService.Controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,14 +46,12 @@ public class EmployeeController {
 	
 	// ------------ Requests only from url: ---------- //
 	
-	// FIND BY POSITION
-	@GetMapping("/position/{position}")
-	public List<EmployeeDTO> listByPosition(@PathVariable String position) {
+	@GetMapping("/position/{position}") // FIND BY POSITION
+	public Response listByPosition(@PathVariable String position) {
 		return employeeService.getByPosition(position);
 	}
 	
-	// FIND BY ID
-	@GetMapping("/id/{id}")
+	@GetMapping("/id/{id}") // FIND BY ID
 	public Response listById(@PathVariable long id) {
 		return employeeService.getById(id);
 	}

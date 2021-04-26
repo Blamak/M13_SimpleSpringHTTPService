@@ -3,43 +3,53 @@ package com.Java.M13_SimpleSpringHTTPService.Model.Repositories;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
 
-@Repository
-public class EmployeeRepository {
 
+/*
+ * Use of RowMapper interface to fetch the records from the database using methods of JdbcTemplate class. 
+ * In the execute of the query methods we need to pass the instance of RowMapper.
+ */
+@Repository
+public class EmployeeRepository implements RowMapper<Employee>{
+
+	// to connect to the database and execute SQL queries
 	private final JdbcTemplate jdbcTemplate;
 
-	@Autowired
 	public EmployeeRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	private Employee mapRowToEmployee(ResultSet resultSet, int rowNum) throws SQLException {
+	/**
+	 * RowMapper interface is used by JdbcTemplate for mapping rows of a ResultSet
+	 * on a per-row basis to map a row of a result set to the Employee record 
+	 */
+	@Override
+	public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return Employee.builder()
-				.id(resultSet.getLong("id"))
-				.name(resultSet.getString("name"))
-				.position(resultSet.getString("position"))
+				.id(rs.getLong("id"))
+				.name(rs.getString("name"))
+				.position(rs.getString("position"))
 				.build();
 	}
-
+	
 	public List<Employee> findAll() {
 		String sqlQuery = "select * from employees";
-		return jdbcTemplate.query(sqlQuery, this::mapRowToEmployee);
+		return jdbcTemplate.query(sqlQuery, this::mapRow);
 	}
 
 	public Employee findById(long id) {
 		String sqlQuery = "select id, name, position " + "from employees where id = ?";
-		return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToEmployee, id);
+		return jdbcTemplate.queryForObject(sqlQuery, this::mapRow, id);
 	}
 
 	public List<Employee> findByPosition(String position) {
 		String sqlQuery = "select * from employees where position = ?";
-		return jdbcTemplate.query(sqlQuery, this::mapRowToEmployee, position);
+		return jdbcTemplate.query(sqlQuery, this::mapRow, position);
 	}
 
 	public int deleteById(long id) {
@@ -61,5 +71,6 @@ public class EmployeeRepository {
 				            employee.getPosition(),
 				            employee.getId());
 	}
+
 
 }
