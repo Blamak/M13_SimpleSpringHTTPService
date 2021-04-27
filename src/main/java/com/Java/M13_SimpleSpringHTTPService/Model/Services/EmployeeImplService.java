@@ -68,7 +68,7 @@ public class EmployeeImplService implements EmployeeService {
 		// find employee by id - error if not found
 		Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ParamNotFoundException(id));
 		
-		// send error message if the info sent is the same as in the database
+		// send error message if there is no change in the employee's info
 		if ( employee.getName().equals(employeeDTO.getName()) &&
 			 employee.getPosition().equals(employeeDTO.getPosition()) ) {
 			Response response = new Response("Error", "nothing changed for this employee");
