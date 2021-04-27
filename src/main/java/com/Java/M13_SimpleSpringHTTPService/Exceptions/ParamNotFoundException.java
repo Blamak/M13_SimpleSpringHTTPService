@@ -16,7 +16,7 @@ public class ParamNotFoundException extends RuntimeException {
 
 	// wrong position case
 	public ParamNotFoundException(String position) {
-		super("Could not find position " + position);
+		super(position + " is not a valid job position");
 	}
 
 }
