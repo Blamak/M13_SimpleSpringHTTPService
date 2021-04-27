@@ -27,18 +27,18 @@ public class EmployeeImplService implements EmployeeService {
 	@Override
 	public Response getAllEmployees() {
 		try {
-			List<EmployeeDTO> listEmployeesDTO = null; // empty list to append every employee from the database 
 			List<Employee> listEmployees = employeeRepository.findAll();
+			// empty list to append every employee from the database
+			List<EmployeeDTO> listEmployeesDTO = new ArrayList<>();  
 			
 			if (listEmployees != null && listEmployees.size() > 0) {
-				listEmployeesDTO = new ArrayList<EmployeeDTO>();
 				for (Employee employee : listEmployees) {
 					listEmployeesDTO.add(this.mapEntitytoDTO(employee));
 				}
+				return new Response("OK", listEmployeesDTO);
 			} else {
 				return new Response("Error", "No employees in the database yet"); // empty database error
 			}
-			return new Response("OK", listEmployeesDTO);
 		} catch (Exception e) {
 			return new Response("Error", e.getMessage());
 		}
