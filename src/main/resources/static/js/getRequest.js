@@ -1,3 +1,4 @@
+// GET REQUEST - list all employees
 $(document).ready(function() {
 	ajaxGet(); // Build employees' table on first run
 })
@@ -15,6 +16,7 @@ function ajaxGet() {
 					row.append($(`<th scope="row">`).append(employee.id))
 					row.append($('<td>').append(`<input type="text" value=${employee.name}>`));
 					row.append($('<td>').append(`<input type="text" value=${employee.position}>`));
+					row.append($('<td>').append(`<input type="text" value=${employee.salary} readonly></input>`));
 					row.append($('<td>').append(`<button class="delete btn btn-outline-danger">Delete</button`));
 					row.append($('<td>').append(`<button class="update btn btn-outline-primary">Update</button`));
 

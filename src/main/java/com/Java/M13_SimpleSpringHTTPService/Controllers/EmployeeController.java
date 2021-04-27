@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.Java.M13_SimpleSpringHTTPService.Model.DTO.EmployeeDTO;
 import com.Java.M13_SimpleSpringHTTPService.Model.Services.EmployeeService;
 import com.Java.M13_SimpleSpringHTTPService.Response.Response;
 
 @RestController
+@RequestMapping("/employees")
 public class EmployeeController {
 
 	@Autowired
@@ -22,24 +24,24 @@ public class EmployeeController {
 
 	// ----------- Requests through Ajax: --------- //
 	
-	@PostMapping("/save") // CREATE
+	@PostMapping("") // CREATE
 	public Response newEmployee(@RequestBody EmployeeDTO employeeDTO) {
 		return employeeService.saveEmployee(employeeDTO);
 	}
 	
-	@GetMapping("/employees") // READ
+	@GetMapping("") // READ
 	public Response listEmployees() {
 		return employeeService.getAllEmployees();
 	}
 	
 	
-	@PutMapping("/employees/{id}") // UPDATE
+	@PutMapping("/{id}") // UPDATE
 	public Response updateEmployee(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
 		return employeeService.replaceEmployee(employeeDTO, id);
 	}
 	
 	
-	@DeleteMapping("/employees/{id}") // DELETE
+	@DeleteMapping("/{id}") // DELETE
 	public Response deleteEmployee(@PathVariable Integer id) {
 		return employeeService.deleteById(id);
 	}
@@ -47,14 +49,13 @@ public class EmployeeController {
 
 	// ------------ Requests only from url: ---------- //
 	
-	// FIND BY POSITION
-	@GetMapping("/position/{position}")
+	@GetMapping("/position/{position}") // FIND BY POSITION
 	public List<EmployeeDTO> listByPosition(@PathVariable String position) {
-		return employeeService.getByPosition(position);
+		return employeeService.getEmployeeByPosition(position);
 	}
 	
-	// FIND BY id
-	@GetMapping("/id/{id}")
+	
+	@GetMapping("/id/{id}") // FIND BY ID
 	public EmployeeDTO listById(@PathVariable Integer id) {
 		return employeeService.getEmployeeById(id);
 	}

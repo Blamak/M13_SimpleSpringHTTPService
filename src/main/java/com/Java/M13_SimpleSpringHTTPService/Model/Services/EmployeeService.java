@@ -16,6 +16,6 @@ public interface EmployeeService {
 	
 
 	EmployeeDTO getEmployeeById(Integer id);
-	List<EmployeeDTO> getByPosition(String position);
+	List<EmployeeDTO> getEmployeeByPosition(String position);
 
 }
