@@ -97,11 +97,8 @@ public class EmployeeImplService implements EmployeeService {
 	}
 	
 
-	// ---------------------------- DTO←→Entity conversions: -------------------------------- //
+// ---------------------------- DTO←→Entity conversions: -------------------------------- //
 
-	/*
-	 *  DTO-entity conversion
-	 */
 	private Employee mapDtotoEntity(EmployeeDTO dto) { 
 		Employee emp = new Employee();
 		if (dto.getId() != null) {
@@ -113,9 +110,6 @@ public class EmployeeImplService implements EmployeeService {
 		return emp;
 	}
 
-	/*
-	 * Entity-DTO conversion
-	 */
 	private EmployeeDTO mapEntitytoDTO(Employee entity) {
 		EmployeeDTO dto = new EmployeeDTO();
 		dto.setId(entity.getId());
