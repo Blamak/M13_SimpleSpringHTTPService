@@ -35,10 +35,10 @@ public class EmployeeImplService implements EmployeeService {
 				for (Employee employee : listEmployees) {
 					listEmployeesDTO.add(this.mapEntitytoDTO(employee));
 				}
+				return new Response("OK", listEmployeesDTO);
 			} else {
 				return new Response("Error", "No employees in the database yet"); // empty database error
 			}
-			return new Response("OK", listEmployeesDTO);
 		} catch (Exception e) {
 			return new Response("Error", e.getMessage());	
 		}
