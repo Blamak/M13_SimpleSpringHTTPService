@@ -24,10 +24,12 @@ function ajaxGet() {
 				});
 				console.log("Success: ", result);
 			} else {
+				alert(result.data)
 				console.log("Fail: ", result);
 			}
 		},
 		error: function(e) {
+			alert("Error!")
 			console.log("ERROR: ", e);
 		}
 	});

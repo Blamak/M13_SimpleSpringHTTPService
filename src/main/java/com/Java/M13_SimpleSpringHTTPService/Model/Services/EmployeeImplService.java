@@ -21,68 +21,73 @@ public class EmployeeImplService implements EmployeeService {
 	@Autowired
 	EmployeeRepository employeeRepository;
 
+	
+// ---------------------------- Methods called in requests available in UI -------------------------- //
+	
 	@Override
 	public Response getAllEmployees() {
-		List<EmployeeDTO> listEmployeesDTO = null;
-		List<Employee> listEmployees = employeeRepository.findAll();
-		
-		if (listEmployees != null && listEmployees.size() > 0) {
-			listEmployeesDTO = new ArrayList<EmployeeDTO>();
-			for (Employee employee : listEmployees) {
-				listEmployeesDTO.add(this.mapEntitytoDTO(employee));
+		try {
+			List<EmployeeDTO> listEmployeesDTO = null; // empty list to append every employee from the database 
+			List<Employee> listEmployees = employeeRepository.findAll();
+			
+			if (listEmployees != null && listEmployees.size() > 0) {
+				listEmployeesDTO = new ArrayList<EmployeeDTO>();
+				for (Employee employee : listEmployees) {
+					listEmployeesDTO.add(this.mapEntitytoDTO(employee));
+				}
+			} else {
+				return new Response("Error", "No employees in the database yet"); // empty database error
 			}
+			return new Response("OK", listEmployeesDTO);
+		} catch (Exception e) {
+			return new Response("Error", e.getMessage());
 		}
-		
-		Response response = new Response("OK", listEmployeesDTO);
-		return response;
 	}
 
 	@Override
 	public Response saveEmployee(EmployeeDTO employeeDTO) {
-		// check if "position" in the body's request is in the enum PositionsEnum. Return error Response if not.
+		// check if "position" in the body's request exists in PositionsEnum. Return error Response if not.
 		Boolean positionExists = Arrays.stream(PositionsEnum.values())
 								       .anyMatch( position -> position.name().equals(employeeDTO.getPosition()) );
-		if (!positionExists) {
-			Response response = new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
-			return response;
+		if (!positionExists)
+			return new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
+			
+		try {
+			// convert to entity and save new employee to database
+			Employee newEmployee = this.mapDtotoEntity(employeeDTO);
+			newEmployee = employeeRepository.save(newEmployee);			
+			return new Response("OK", newEmployee);
+		} catch (Exception e) {
+			return new Response("Error", e.getMessage());
 		}
-		
-		// save new employee to database
-		Employee newEmployee = this.mapDtotoEntity(employeeDTO);
-		newEmployee = employeeRepository.save(newEmployee);
-		
-		Response response = new Response("OK", newEmployee);
-		return response;
 	}
 
 	@Override
 	public Response replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
-		// check if the body's request "position" exists in the enum PositionsEnum
+		// check if the body's request "position" exists in PositionsEnum. Return error Response if not.
 		Boolean positionExists = Arrays.stream(PositionsEnum.values())
 								       .anyMatch( position -> position.name().equals(employeeDTO.getPosition()) );
-		if (!positionExists) {
-			Response response = new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
-			return response;
-		}
+		if (!positionExists)
+			return new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
 
-		// find employee by id - error if not found
-		Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ParamNotFoundException(id));
-		
-		// send error message if there is no change in the employee's info
-		if ( employee.getName().equals(employeeDTO.getName()) &&
-			 employee.getPosition().equals(employeeDTO.getPosition()) ) {
-			Response response = new Response("Error", "nothing changed for this employee");
-			return response;	
+		try {
+			Employee employee = employeeRepository.findById(id)
+					                              .orElseThrow(() -> new ParamNotFoundException(id));
+			// send error message if there is no change in the employee's info
+			if ( employee.getName().equals(employeeDTO.getName()) &&
+					employee.getPosition().equals(employeeDTO.getPosition()) )
+				return new Response("Error", "nothing changed for this employee");
+			
+			// modify employee's info in the database
+			employee.setName(employeeDTO.getName());
+			employee.setPosition(employeeDTO.getPosition());
+			employeeRepository.save(employee);
+			
+			EmployeeDTO empDTO = this.mapEntitytoDTO(employee);
+			return new Response("OK", empDTO);
+		} catch (Exception e) {
+			return new Response("Error", e.getMessage());
 		}
-		
-		// modify employee's info
-		employee.setName(employeeDTO.getName());
-		employee.setPosition(employeeDTO.getPosition());
-		employeeRepository.save(employee);
-		
-		EmployeeDTO empDTO = this.mapEntitytoDTO(employee);
-		Response response = new Response("OK", empDTO);
-		return response;
 	}
 
 	@Override
@@ -98,6 +103,9 @@ public class EmployeeImplService implements EmployeeService {
 		}
 	}
 
+	
+// --------------------------------- Methods called in requests NOT available in UI -------------------------- //
+	
 	@Override
 	public List<EmployeeDTO> getEmployeeByPosition(String position) {
 		return Optional.ofNullable(
@@ -117,28 +125,25 @@ public class EmployeeImplService implements EmployeeService {
 	}
 	
 
-	// DTO-entity conversion
+// --------------------------------------- Methods for DTO←→Entity conversion -------------------------------- //
+
 	private Employee mapDtotoEntity(EmployeeDTO dto) {
 		Employee emp = new Employee();
-		
 		if (dto.getId() != null) {
 			emp.setId(dto.getId());
 		}
-		
 		emp.setName(dto.getName());
 		emp.setPosition(dto.getPosition());
 
 		return emp;
 	}
 
-	// Entity-DTO conversion
 	private EmployeeDTO mapEntitytoDTO(Employee entity) {
-		// first extract entity's position to calculate salary (enum...)
+		// first extract entity's position to get salary
 		String positionReturned = entity.getPosition();
 		int employeeSalary = PositionsEnum.valueOf(positionReturned).showSalary();
 		
 		EmployeeDTO dto = new EmployeeDTO();
-		
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setPosition(entity.getPosition());
