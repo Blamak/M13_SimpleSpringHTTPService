@@ -1,10 +1,10 @@
+// PUT REQUEST - modify employee's info
 $(document).on("click", ".update", function() {
 	try {
-
 		// Retrieve and store current row info
 		const id = $(this).closest('tr').find("th:first").text();
 		const name = $(this).closest('tr').find("td:nth-child(2) input").val();
-		const position = $(this).closest('tr').find("td:nth-child(3) input").val();
+		const position = $(this).closest('tr').find("td:nth-child(3) input").val().toUpperCase();
 
 		// Empty field validation
 		if (name.trim() == '' || position.trim() == '') {
@@ -24,16 +24,15 @@ $(document).on("click", ".update", function() {
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			success: function(result) {
-				
 				if (result.status == "OK") {
 					alert("Put Successfully!" + "  ---> Employee's New Info:"
 						+ "\nName = " + result.data.name
 						+ " , Position = " + result.data.position)
 					location.reload();
-				} else {
-					console.log("Fail: " + result)
+				} else if (result.status == "Error") {
+					alert(result.data);
+					location.reload();
 				}
-				
 			},
 			error: function(e) {
 				alert("Error!")
@@ -43,6 +42,7 @@ $(document).on("click", ".update", function() {
 
 	} catch (e) {
 		alert(e);
+		location.reload();
 	}
 });
 
