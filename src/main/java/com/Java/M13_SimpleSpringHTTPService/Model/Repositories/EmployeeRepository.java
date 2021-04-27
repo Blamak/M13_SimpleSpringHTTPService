@@ -11,8 +11,10 @@ import com.Java.M13_SimpleSpringHTTPService.Model.Entities.Employee;
 
 
 /*
- * Use of RowMapper interface to fetch the records from the database using methods of JdbcTemplate class. 
- * In the execute of the query methods we need to pass the instance of RowMapper.
+ * Use of RowMapper interface to fetch the records from the database using methods of JdbcTemplate class
+ *  
+ * In the execute of the '.query' methods the instance of RowMapper must be passed
+ * 
  */
 @Repository
 public class EmployeeRepository implements RowMapper<Employee>{

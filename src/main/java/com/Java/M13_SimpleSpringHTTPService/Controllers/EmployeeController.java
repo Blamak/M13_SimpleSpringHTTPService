@@ -20,7 +20,8 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	// ----------- Requests through Ajax: --------- //
+
+// ------------------------------------ Requests available in UI ----------------------------- //
 	
 	@PostMapping("") // CREATE
 	public Response newEmployee(@RequestBody EmployeeDTO employeeDTO) {
@@ -37,14 +38,13 @@ public class EmployeeController {
 		return employeeService.replaceEmployee(employeeDTO, id);
 	}
 	
-	
 	@DeleteMapping("/{id}") // DELETE
 	public Response deleteEmployee(@PathVariable long id) {
 		return employeeService.deleteById(id);
 	}
 	
-	
-	// ------------ Requests only from url: ---------- //
+
+	// ------------------------------------ Requests NOT available in UI ----------------------------- //
 	
 	@GetMapping("/position/{position}") // FIND BY POSITION
 	public Response listByPosition(@PathVariable String position) {

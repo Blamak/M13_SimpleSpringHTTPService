@@ -31,7 +31,7 @@ $(document).on("click", ".update", function() {
 						+ " , Position = " + result.data.position)
 					location.reload();
 				} else if (result.status == "Error") {
-					alert(`"${position}" is not a valid job position`);
+					alert(result.data);
 					location.reload();
 				} else {
 					console.log("Fail: " + result)
