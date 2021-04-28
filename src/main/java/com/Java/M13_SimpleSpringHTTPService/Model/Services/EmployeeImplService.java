@@ -22,11 +22,11 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public List<EmployeeDTO> getAllEmployees() {
-		List<EmployeeDTO> listEmployeesDTO = null;
 		List<Employee> listEmployees = employeeRepository.findAll();
+		// empty list to append every employee from the database
+		List<EmployeeDTO> listEmployeesDTO = new ArrayList<EmployeeDTO>();
 
 		if (listEmployees != null && listEmployees.size() > 0) {
-			listEmployeesDTO = new ArrayList<EmployeeDTO>();
 			for (Employee employee : listEmployees) {
 				listEmployeesDTO.add(this.mapEntitytoDTO(employee));
 			}
@@ -53,21 +53,17 @@ public class EmployeeImplService implements EmployeeService {
 
 	@Override
 	public Employee replaceEmployee(EmployeeDTO employeeDTO, Integer id) {
-		// check if the body's request "position" exists in the enum
+		// check if the body's request "position" exists in the enum; Error response if not
 		Boolean positionExists = (Arrays.stream(PositionEnum.values())
 				.anyMatch((p) -> p.name().equals(employeeDTO.getPosition())));
-
-		if (!positionExists) {
-			throw new ParamNotFoundException(employeeDTO.getPosition());
-		} else {
-			return employeeRepository.findById(id).map(employee -> {
-				employee.setName(employeeDTO.getName());
-				employee.setPosition(employeeDTO.getPosition());
-				
-				return employeeRepository.save(employee);
-			}).orElseThrow(() -> new ParamNotFoundException(id));
-
-		}
+		if (!positionExists) throw new ParamNotFoundException(employeeDTO.getPosition());
+		
+		// modify employee's info in the database
+		return employeeRepository.findById(id).map(employee -> {
+			employee.setName(employeeDTO.getName());
+			employee.setPosition(employeeDTO.getPosition());
+			return employeeRepository.save(employee);
+		}).orElseThrow(() -> new ParamNotFoundException(id)); // non-existent id 
 	}
 
 	@Override
@@ -85,7 +81,7 @@ public class EmployeeImplService implements EmployeeService {
 				.map(employee -> this.mapEntitytoDTO(employee))
 				    .filter(Objects::nonNull)
 				    .collect(Collectors.toList()))
-				.filter(list -> !list.isEmpty())
+				.filter(list -> !list.isEmpty()) // check if param "position" is not present in any employee
 				.orElseThrow(() -> new ParamNotFoundException(position));
 	}
 

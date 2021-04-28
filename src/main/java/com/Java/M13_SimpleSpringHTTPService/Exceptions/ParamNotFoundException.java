@@ -3,9 +3,6 @@ package com.Java.M13_SimpleSpringHTTPService.Exceptions;
 /**
  * Customized message for ParamNotFoundException
  * 
- * Also thrown when a non-existent job position is introduced in the body parameter  
- * of the POST and PUT requests
- * 
  */
 public class ParamNotFoundException extends RuntimeException {
 
