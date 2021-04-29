@@ -49,9 +49,9 @@ public class EmployeeImplService implements EmployeeService {
 		// check if the body's request "position" exists in the enum PositionsEnum. Return error Response if not.
 		Boolean positionExists = Arrays.stream(PositionsEnum.values())
 									   .anyMatch( position -> position.name().equals(employeeDTO.getPosition()) );
-		if (!positionExists) {
-			return new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
-		}
+		
+		if (!positionExists) return new Response(
+				"Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
 		
 		try {
 			//convert to entity and save new employee to database
@@ -68,9 +68,9 @@ public class EmployeeImplService implements EmployeeService {
 		// check if the body's request "position" exists in the enum PositionsEnum
 		Boolean positionExists = Arrays.stream(PositionsEnum.values())
 								       .anyMatch( position -> position.name().equals(employeeDTO.getPosition()) );
-		if (!positionExists) {
-			return new Response("Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
-		}
+
+		if (!positionExists) return new Response(
+				"Error", new ParamNotFoundException(employeeDTO.getPosition()).getMessage());
 
 		try {
 			Employee employee = employeeRepository.findById(id);
@@ -79,7 +79,7 @@ public class EmployeeImplService implements EmployeeService {
 					employee.getPosition().equals(employeeDTO.getPosition()) )
 				return new Response("Error", "nothing changed for this employee");
 			
-			// modify employee's data
+			// modify employee's info in database
 			employee.setName(employeeDTO.getName());
 			employee.setPosition(employeeDTO.getPosition());
 			employeeRepository.update(employee);
@@ -111,15 +111,18 @@ public class EmployeeImplService implements EmployeeService {
 	
 	@Override
 	public Response getByPosition(String position) {
-		List<EmployeeDTO> listByPosition = employeeRepository.findByPosition(position).stream()
-				.map(employee -> this.mapEntitytoDTO(employee))
-				.collect(Collectors.toList());
-		
-		if (listByPosition.isEmpty()) {
-			// error response if position doesn't exist (= empty list)
-			return new Response("Error", new ParamNotFoundException(position).getMessage());
-		} else {		
-			return new Response("Ok", listByPosition);
+		try {
+			List<EmployeeDTO> listByPosition = employeeRepository.findByPosition(position).stream()
+					                           .map(employee -> this.mapEntitytoDTO(employee))
+					                           .collect(Collectors.toList());
+			if (listByPosition.isEmpty()) {
+				// error response if position doesn't exist (= empty list)
+				return new Response("Error", new ParamNotFoundException(position).getMessage());
+			} else {
+				return new Response("Ok", listByPosition);
+			}
+		} catch (Exception e) {
+			return new Response("Error", e.getMessage());
 		}
 	}
 
